@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { DiaryEntry } from '@/types/diary';
+import { toast } from 'sonner';
 
 interface RandomLineProps {
   entry: DiaryEntry | null;
@@ -10,7 +11,6 @@ interface RandomLineProps {
 export function RandomLine({ entry, onRefresh }: RandomLineProps) {
   const [hintVisible, setHintVisible] = useState(true);
 
-  // Fade out hint after first tap or after 4 seconds
   useEffect(() => {
     const timer = setTimeout(() => setHintVisible(false), 4000);
     return () => clearTimeout(timer);
@@ -45,12 +45,17 @@ export function RandomLine({ entry, onRefresh }: RandomLineProps) {
       className="text-center px-6 max-w-2xl mx-auto cursor-pointer"
       onClick={handleTap}
     >
-      {/* Line - visually strongest */}
-      <blockquote className="font-serif text-2xl md:text-3xl leading-relaxed text-foreground mb-6 diary-line">
+      <blockquote
+        className="font-serif text-2xl md:text-3xl leading-relaxed text-foreground mb-6 diary-line cursor-text"
+        onClick={(e) => {
+          e.stopPropagation();
+          void navigator.clipboard.writeText(entry.line);
+          toast('Copied');
+        }}
+      >
         "{entry.line}"
       </blockquote>
-      
-      {/* Emotion - softer */}
+
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -60,8 +65,11 @@ export function RandomLine({ entry, onRefresh }: RandomLineProps) {
         <span className="inline-block px-3 py-1 rounded-full bg-accent/60 text-accent-foreground/80 text-sm">
           {entry.emotion}
         </span>
-        
-        {/* Moment - even softer */}
+
+        {entry.author ? (
+          <p className="text-xs text-muted-foreground/70 italic">— {entry.author}</p>
+        ) : null}
+
         {entry.moment && (
           <p className="text-muted-foreground/60 text-sm mt-4 italic">
             {entry.moment}
@@ -69,7 +77,6 @@ export function RandomLine({ entry, onRefresh }: RandomLineProps) {
         )}
       </motion.div>
 
-      {/* Hint - fades after interaction or timeout */}
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: hintVisible ? 0.3 : 0 }}

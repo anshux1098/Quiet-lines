@@ -28,6 +28,10 @@ const Index = () => {
     userId,
     addEntry,
     addWord,
+    updateEntry,
+    updateWord,
+    deleteEntry,
+    deleteWord,
     exportData,
     importData,
   } = useDiary();
@@ -52,6 +56,7 @@ const Index = () => {
     meaning?: string;
     languageNote?: string;
     moment?: string;
+    author?: string;
     sourceType?: 'poem' | 'shayari' | 'song' | 'book' | 'other';
   }) => {
     addEntry(data);
@@ -111,6 +116,8 @@ const Index = () => {
           <BrowseView
             key="browse"
             entries={entries}
+            deleteEntry={deleteEntry}
+            updateEntry={updateEntry}
           />
         )}
 
@@ -119,6 +126,8 @@ const Index = () => {
             key="words"
             words={words}
             onAddClick={() => setShowAddWord(true)}
+            deleteWord={deleteWord}
+            updateWord={updateWord}
           />
         )}
 
@@ -137,6 +146,8 @@ const Index = () => {
           onNavigate={(view) => setCurrentView(view)}
           onExport={handleExport}
           onImport={() => setShowImport(true)}
+          entryCount={entries.length}
+          wordCount={words.length}
         />
       )}
 

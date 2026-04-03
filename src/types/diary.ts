@@ -4,6 +4,7 @@ export interface DiaryEntry {
   id: string;
   line: string; // The main text - poem, shayari, song lyric, etc.
   emotion: string; // Required - how this makes the user feel
+  author?: string;
   meaning?: string; // User's interpretation
   languageNote?: string; // Beauty note about the language
   moment?: string; // Context/moment when this was added

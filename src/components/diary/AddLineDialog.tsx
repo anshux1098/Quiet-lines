@@ -15,6 +15,7 @@ interface AddLineDialogProps {
     meaning?: string;
     languageNote?: string;
     moment?: string;
+    author?: string;
     sourceType?: 'poem' | 'shayari' | 'song' | 'book' | 'other';
   }) => void;
 }
@@ -26,6 +27,7 @@ export function AddLineDialog({ isOpen, onClose, onSave }: AddLineDialogProps) {
   const [meaning, setMeaning] = useState('');
   const [languageNote, setLanguageNote] = useState('');
   const [moment, setMoment] = useState('');
+  const [author, setAuthor] = useState('');
   const [sourceType, setSourceType] = useState<'poem' | 'shayari' | 'song' | 'book' | 'other' | undefined>();
 
   const handleSave = () => {
@@ -37,6 +39,7 @@ export function AddLineDialog({ isOpen, onClose, onSave }: AddLineDialogProps) {
       meaning: meaning.trim() || undefined,
       languageNote: languageNote.trim() || undefined,
       moment: moment.trim() || undefined,
+      author: author.trim() || undefined,
       sourceType,
     });
 
@@ -46,6 +49,7 @@ export function AddLineDialog({ isOpen, onClose, onSave }: AddLineDialogProps) {
     setMeaning('');
     setLanguageNote('');
     setMoment('');
+    setAuthor('');
     setSourceType(undefined);
     setShowOptional(false);
     onClose();
@@ -178,6 +182,16 @@ export function AddLineDialog({ isOpen, onClose, onSave }: AddLineDialogProps) {
                       value={moment}
                       onChange={(e) => setMoment(e.target.value)}
                       className="min-h-[60px] resize-none border-border focus:border-primary bg-background"
+                      autoComplete="off"
+                      autoCorrect="off"
+                      spellCheck={false}
+                    />
+
+                    <Input
+                      placeholder="Who wrote this? (optional)"
+                      value={author}
+                      onChange={(e) => setAuthor(e.target.value)}
+                      className="border-border focus:border-primary bg-background"
                       autoComplete="off"
                       autoCorrect="off"
                       spellCheck={false}
